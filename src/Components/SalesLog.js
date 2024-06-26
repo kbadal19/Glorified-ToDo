@@ -52,11 +52,24 @@ const SalesLog = () => {
     setFilteredTasks(updatedFilteredTasks);
   }, [tasks, noteFilter]);
 
+  const handleStatusFilterChange = (selectedStatus) => {
+    const { open, closed } = selectedStatus;
+    if (open && closed) {
+      setFilteredTasks(tasks);
+    } else if (open) {
+      setFilteredTasks(tasks.filter((task) => task.status === "open"));
+    } else if (closed) {
+      setFilteredTasks(tasks.filter((task) => task.status === "closed"));
+    } else {
+      setFilteredTasks([]);
+    }
+  };
+
   useEffect(() => {
     setFilteredTasks(tasks);
   }, [tasks]);
 
-  const handleStatusFilterChange = (selectedStatus) => {
+  const handleFilterChange = (selectedStatus) => {
     const { open, closed } = selectedStatus;
     if (open && closed) {
       setFilteredTasks(tasks);
@@ -107,7 +120,7 @@ const SalesLog = () => {
     return `${hours12}:${minutes} ${period}`;
   };
 
-  const addNote = async (newNote) => {
+  const addNote = async (selectedTaskId, newNote) => {
     try {
       await axios.put(`http://localhost:5000/tasks/${selectedTaskId}`, {
         notes: newNote,
@@ -278,13 +291,27 @@ const SalesLog = () => {
                 </th>
                 <th className="px-2 py-4 text-left text-gray-600 font-medium">
                   <div className="flex items-center justify-center">
-                  <NoteFilter onFilterChange={handleNoteFilterChange} />
+                    Notes
+                    <span className="ml-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M3.792 2.938A49.069 49.069 0 0 1 12 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 0 1 1.541 1.836v1.044a3 3 0 0 1-.879 2.121l-6.182 6.182a1.5 1.5 0 0 0-.439 1.061v2.927a3 3 0 0 1-1.658 2.684l-1.757.878A.75.75 0 0 1 9.75 21v-5.818a1.5 1.5 0 0 0-.44-1.06L3.13 7.938a3 3 0 0 1-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836Z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </span>
                   </div>
                 </th>
                 <th className="px-2 py-4 text-left text-gray-600 font-medium">
                   <div className="flex items-center justify-center">
                     Status
-                    <StatusFilter onFilterChange={handleStatusFilterChange} />
+                    <StatusFilter onFilterChange={handleFilterChange} />
                   </div>
                 </th>
                 <th className="px-2 py-4 text-left text-gray-600 font-medium"></th>

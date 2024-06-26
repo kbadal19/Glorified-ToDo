@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
-const AddNoteModal = ({ isOpen, onClose, onSave }) => {
-  const [note, setNote] = useState("");
+const AddNoteModal = ({ isOpen, onClose, onSave}) => {
+  const [newNote, setNewNote] = useState("");
 
   const handleSaveNote = () => {
-    onSave(note);
-    setNote("");
+    onSave(newNote);
+    setNewNote("");
   };
 
   return (
@@ -19,8 +19,8 @@ const AddNoteModal = ({ isOpen, onClose, onSave }) => {
         <input
           className="w-full h-24 border rounded p-2 mb-4"
           placeholder="Enter your note here..."
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
+          value={newNote}
+          onChange={(e) => setNewNote(e.target.value)}
         />
         <div className="flex justify-end">
           <button
